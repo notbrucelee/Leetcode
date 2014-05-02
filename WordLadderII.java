@@ -1,4 +1,4 @@
-public class WordLadderII {
+public class Solution {
 	public class Ladder {//Define Ladder class it's important
 		public ArrayList<Ladder> parentList;
 		public String word;
@@ -15,18 +15,16 @@ public class WordLadderII {
 			int cur=0;
 			for(int i=0;i<count;i++) {
 				Ladder curLadder = q.poll();
-				char[] wordChar = curLadder.word.toCharArray();
 				for(int j=0;j<len;j++) { //change one character to any one of 26 letters
-					char p = wordChar[j];
+				    char[] wordChar = curLadder.word.toCharArray();
 					for(char c='a';c<='z';c++) {
-					    if(c==p) continue;
 						wordChar[j]=c;
 						String s = new String(wordChar);						
 						if(s.equals(start)) {//found
 							if(startLadder!=null) startLadder.parentList.add(curLadder); // if this is not the first time found
 							else startLadder = new Ladder(start, curLadder);
 						}
-						else if(dict.contains(s)) {//filter those not in dict
+						else if(dict.contains(s) && !s.equals(curLadder.word)) {//filter those not in dict
 							Ladder newLadder = new Ladder(s,curLadder);
 							q.add(newLadder);	
 							map.put(s,newLadder);
@@ -35,7 +33,6 @@ public class WordLadderII {
 						}
 						else if(map.containsKey(s)) map.get(s).parentList.add(curLadder); //Same level then reuse the revious existing
 					}
-					wordChar[j]=p;
 				}
 			}
 			count=cur;
